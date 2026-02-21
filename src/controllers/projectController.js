@@ -26,6 +26,7 @@ export const getAllProjects = asyncHandler(async (req, res) => {
   count: projects.length,
   projects
 });
+});
 
 // 👤 Student — my films
 export const getMyProjects = asyncHandler(async (req, res) => {
