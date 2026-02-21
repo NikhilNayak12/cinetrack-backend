@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import { errorHandler } from "./middlewares/errorMiddleware.js";
 
 const app = express();
 
@@ -22,5 +23,7 @@ app.use("/api/tasks", taskRoutes);
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
+
+app.use(errorHandler);
 
 export default app;
