@@ -11,11 +11,21 @@ export const createProjectService = async (data, userId) => {
 };
 
 // 📋 Get all projects (admin/judge use)
-export const getAllProjectsService = async () => {
-  return await Project.find()
+import { getPagination } from "../utils/pagination.js";
+
+export const getAllProjectsService = async (query) => {
+  const { limit, skip } = getPagination(query);
+
+  const projects = await Project.find()
     .populate("submittedBy", "name email role")
     .populate("assignedJudges", "name email role")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Project.countDocuments();
+
+  return { projects, total };
 };
 
 // 👤 Get projects by student
