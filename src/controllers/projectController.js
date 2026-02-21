@@ -18,13 +18,13 @@ export const createProject = asyncHandler(async (req, res) => {
 
 // 📋 Admin/Judge — all films
 export const getAllProjects = asyncHandler(async (req, res) => {
-  const projects = await getAllProjectsService();
+  const { projects, total } = await getAllProjectsService(req.query);
 
   res.status(200).json({
-    success: true,
-    count: projects.length,
-    projects
-  });
+  success: true,
+  total,
+  count: projects.length,
+  projects
 });
 
 // 👤 Student — my films
