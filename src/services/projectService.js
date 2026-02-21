@@ -1,0 +1,39 @@
+import Project from "../models/Project.js";
+
+// 🎬 Create film submission
+export const createProjectService = async (data, userId) => {
+  const project = await Project.create({
+    ...data,
+    submittedBy: userId
+  });
+
+  return project;
+};
+
+// 📋 Get all projects (admin/judge use)
+export const getAllProjectsService = async () => {
+  return await Project.find()
+    .populate("submittedBy", "name email role")
+    .populate("assignedJudges", "name email role")
+    .sort({ createdAt: -1 });
+};
+
+// 👤 Get projects by student
+export const getMyProjectsService = async (userId) => {
+  return await Project.find({ submittedBy: userId })
+    .populate("assignedJudges", "name email role")
+    .sort({ createdAt: -1 });
+};
+
+// 🔍 Get single project
+export const getProjectByIdService = async (projectId) => {
+  const project = await Project.findById(projectId)
+    .populate("submittedBy", "name email role")
+    .populate("assignedJudges", "name email role");
+
+  if (!project) {
+    throw new Error("Project not found");
+  }
+
+  return project;
+};
