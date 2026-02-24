@@ -1,6 +1,7 @@
 import Task from "../models/Task.js";
 import Project from "../models/Project.js";
 import User from "../models/User.js";
+import { getPagination } from "../utils/pagination.js";
 
 // 🎯 Create review task (admin only)
 export const createTaskService = async (data) => {
@@ -29,10 +30,18 @@ export const createTaskService = async (data) => {
 };
 
 // 👨‍⚖️ Judge — my assigned tasks
-export const getMyTasksService = async (userId) => {
-  return await Task.find({ assignedTo: userId })
+export const getMyTasksService = async (userId, query) => {
+  const { limit, skip } = getPagination(query);
+
+  const tasks = await Task.find({ assignedTo: userId })
     .populate("projectId", "title genre status")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Task.countDocuments({ assignedTo: userId });
+
+  return { tasks, total };
 };
 
 // 🔍 Get single task
