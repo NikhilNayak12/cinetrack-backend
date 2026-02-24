@@ -8,6 +8,9 @@ import asyncHandler from "../utils/asyncHandler.js";
 
 // 🎬 Create film
 export const createProject = asyncHandler(async (req, res) => {
+  if (req.file) {
+  req.body.filmUrl = req.file.path;
+}
   const project = await createProjectService(req.body, req.user._id);
 
   res.status(201).json({
