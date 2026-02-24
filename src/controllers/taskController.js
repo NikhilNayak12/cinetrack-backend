@@ -2,7 +2,7 @@ import {
   createTaskService,
   getMyTasksService,
   getTaskByIdService,
-  updateTaskService
+  updateTaskService,
 } from "../services/taskService.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
@@ -12,18 +12,19 @@ export const createTask = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     success: true,
-    task
+    task,
   });
 });
 
 // Judge — my tasks
 export const getMyTasks = asyncHandler(async (req, res) => {
-  const tasks = await getMyTasksService(req.user._id);
+  const { tasks, total } = await getMyTasksService(req.user._id, req.query);
 
   res.status(200).json({
     success: true,
+    total,
     count: tasks.length,
-    tasks
+    tasks,
   });
 });
 
@@ -33,20 +34,16 @@ export const getTaskById = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    task
+    task,
   });
 });
 
 // Judge updates review
 export const updateTask = asyncHandler(async (req, res) => {
-  const task = await updateTaskService(
-    req.params.id,
-    req.user._id,
-    req.body
-  );
+  const task = await updateTaskService(req.params.id, req.user._id, req.body);
 
   res.status(200).json({
     success: true,
-    task
+    task,
   });
 });
