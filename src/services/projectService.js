@@ -1,4 +1,5 @@
 import Project from "../models/Project.js";
+import { buildProjectSearchQuery } from "../utils/searchFilter.js";
 
 // 🎬 Create film submission
 export const createProjectService = async (data, userId) => {
@@ -15,15 +16,16 @@ import { getPagination } from "../utils/pagination.js";
 
 export const getAllProjectsService = async (query) => {
   const { limit, skip } = getPagination(query);
+  const filter = buildProjectSearchQuery(query);
 
-  const projects = await Project.find()
+  const projects = await Project.find(filter)
     .populate("submittedBy", "name email role")
     .populate("assignedJudges", "name email role")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);
 
-  const total = await Project.countDocuments();
+  const total = await Project.countDocuments(filter);
 
   return { projects, total };
 };
