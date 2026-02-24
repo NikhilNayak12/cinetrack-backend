@@ -9,9 +9,7 @@ export const createProjectValidation = [
 
   body("genre").notEmpty().withMessage("Genre is required"),
 
-  body("filmUrl")
-    .notEmpty()
-    .withMessage("Film URL is required")
+  body("filmUrl").optional()
 ];
 
 export const projectIdValidation = [
