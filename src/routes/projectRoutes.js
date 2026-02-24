@@ -12,6 +12,7 @@ import {
   createProjectValidation,
   projectIdValidation,
 } from "../utils/projectValidation.js";
+import { uploadVideo } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
@@ -32,9 +33,10 @@ router.post(
   "/",
   protect,
   authorizeRoles("student", "admin"),
+  uploadVideo.single("video"),
   ...createProjectValidation,
   validateRequest,
-  createProject,
+  createProject
 );
 
 // 📋 Admin/Judge view all films
