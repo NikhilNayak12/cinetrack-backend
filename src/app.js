@@ -6,6 +6,8 @@ import userRoutes from "./routes/userRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 
 const app = express();
 
@@ -13,6 +15,8 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
@@ -23,6 +27,7 @@ app.use("/api/tasks", taskRoutes);
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Server is running" });
 });
+
 
 app.use(errorHandler);
 
