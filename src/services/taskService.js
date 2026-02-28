@@ -49,7 +49,7 @@ export const getMyTasksService = async (userId, query) => {
 // 🔍 Get single task
 export const getTaskByIdService = async (taskId) => {
   const task = await Task.findById(taskId)
-    .populate("projectId", "title genre")
+    .populate("projectId", "title genre description filmUrl posterUrl")
     .populate("assignedTo", "name email role");
 
   if (!task) {
