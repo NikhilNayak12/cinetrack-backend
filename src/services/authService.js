@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
+import { getInviteByTokenService, markInviteUsedService } from "../services/inviteService.js";
 
 export const registerUserService = async ({ name, email, password }) => {
   const existingUser = await User.findOne({ email });
@@ -24,6 +25,35 @@ export const registerUserService = async ({ name, email, password }) => {
       role: user.role
     },
     token
+  };
+};
+
+export const registerFromInviteService = async ({ token, name, password }) => {
+  const invite = await getInviteByTokenService(token);
+
+  const existingUser = await User.findOne({ email: invite.email });
+  if (existingUser) {
+    throw new Error("A user with this email already exists");
+  }
+
+  const user = await User.create({
+    name: name.trim(),
+    email: invite.email,
+    password,
+    role: invite.role
+  });
+
+  await markInviteUsedService(invite._id);
+
+  const jwt = generateToken(user._id);
+  return {
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    },
+    token: jwt
   };
 };
 

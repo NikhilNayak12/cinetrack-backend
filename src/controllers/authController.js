@@ -1,5 +1,6 @@
 import {
   registerUserService,
+  registerFromInviteService,
   loginUserService
 } from "../services/authService.js";
 import asyncHandler from "../utils/asyncHandler.js";
@@ -8,6 +9,15 @@ import asyncHandler from "../utils/asyncHandler.js";
 export const registerUser = asyncHandler(async (req, res) => {
   const data = await registerUserService(req.body);
 
+  res.status(201).json({
+    success: true,
+    ...data
+  });
+});
+
+// Register from invite (judge)
+export const registerFromInvite = asyncHandler(async (req, res) => {
+  const data = await registerFromInviteService(req.body);
   res.status(201).json({
     success: true,
     ...data

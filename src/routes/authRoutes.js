@@ -1,8 +1,9 @@
 import express from "express";
-import { registerUser, loginUser } from "../controllers/authController.js";
+import { registerUser, registerFromInvite, loginUser } from "../controllers/authController.js";
 import { validateRequest } from "../middlewares/validate.js";
 import {
   registerValidation,
+  registerFromInviteValidation,
   loginValidation,
 } from "../utils/authValidation.js";
 
@@ -33,6 +34,7 @@ const router = express.Router();
  *         description: User registered successfully
  */
 router.post("/register", registerValidation, validateRequest, registerUser);
+router.post("/register-from-invite", registerFromInviteValidation, validateRequest, registerFromInvite);
 
 /**
  * @swagger
