@@ -21,3 +21,11 @@ export const loginValidation = [
     .notEmpty()
     .withMessage("Password is required")
 ];
+
+export const registerFromInviteValidation = [
+  body("token").notEmpty().withMessage("Invite token is required"),
+  body("name").notEmpty().trim().withMessage("Name is required"),
+  body("password")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters")
+];
